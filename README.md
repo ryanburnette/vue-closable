@@ -1,71 +1,60 @@
-# vue-closable
+# [vue-closable](https://github.com/ryanburnette/vue-closable)
 
-If you're looking for a quick way to detect clicks outside of an element in Vue, then this simple directive is what you need.
+A Vue directive that detects clicks outside of an element.
 
-## Setup
+This is a fork of
+[TahaSh/vue-closable](https://github.com/TahaSh/vue-closable). This version is
+written in Common Js, has no build step, takes exclusions as an array of
+selectors, and allows exclusions to be outside the context of the closable
+element.
+
+## Install
 
 ```
-npm install vue-closable
+npm install @ryanburnette/vue-closable
 ```
 
-You have two ways to setup `vue-closable`:
-
-#### CommonJS (Webpack/Browserify)
-
-- ES6
+## Include
 
 ```js
-import VueClosable from 'vue-closable'
-Vue.use(VueClosable)
+var VueClosable = require('vue-closable');
+Vue.use(VueClosable);
 ```
 
-- ES5
-
-```js
-var VueClosable = require('vue-closable')
-Vue.use(VueClosable)
-```
-
-#### Include
-
-Include it directly with a `<script>` tag. In this case, you don't need to write `Vue.use(VueClosable)`, this will be done automatically for you.
-
-## Demo
-You can check this [CodePen](https://codepen.io/tahazsh/pen/yGoYBb) to see how it works.
+Include it directly with a `<script>` tag. In this case, you don't need to write
+`Vue.use(VueClosable)`, this will be done automatically for you.
 
 ## Usage
 
-To listen for clicks outside an element, use the `v-closable` directive on it , like this:
+To listen for clicks outside an element, use the `v-closable` directive on it.
+Provide the name of the handler that closes the popup. Exclude elements by
+passing an array of selectors that will be passed to document.querySelectorAll.
+If any of those elements contain the target, the handler won't be called. Note
+that exclusions don't need to be children of the contextual app... it searches
+the whole document.
 
-```
+```html
 <div
   v-closable="{
     handler: 'onClose'
-    exclude: ['fooElementRef', 'barElementRef']
+    exclude: ['.foo', 'button.bar']
   }"
 ></div>
 ```
 
-`handler` has the name of the method to call when the user clicks outside the element. So you just have to define it in `methods` section.
-
-In `exclude` we have the elements that we don't want to call the handler if clicked on.
-
-Note that in `exclude` we use the reference name of the element. You can define them via the `ref` attribute. For example: `<button ref="button"></button>`.
-
 # Example: Close an element on outside click
 
-I named this directive `v-closable` because the common use case for detecting outside clicks is to close elements (like dropdowns and modals). And to do that, we have to use `v-show` or `v-if` on the element and set its value to `false` when the user clicks outside it.
+I named this directive `v-closable` because the common use case for detecting
+outside clicks is to close elements (like dropdowns and modals). And to do that,
+we have to use `v-show` or `v-if` on the element and set its value to `false`
+when the user clicks outside it.
 
 Here's an example:
 
-``` html
+```html
 <template>
   <div id="app">
-    <button
-      ref="button"
-      class="toggle-button"
-      @click="showPopup = !showPopup"
-    >
+    <button ref="button" class="toggle-button" @click="showPopup = !showPopup">
       TOGGLE
     </button>
     <div
@@ -82,33 +71,23 @@ Here's an example:
 </template>
 
 <script>
-import Vue from 'vue'
-import VueClosable from 'vue-closable'
+  import Vue from 'vue';
+  import VueClosable from 'vue-closable';
 
-Vue.use(VueClosable)
+  Vue.use(VueClosable);
 
-export default {
-  data () {
-    return {
-      showPopup: false
+  export default {
+    data() {
+      return {
+        showPopup: false
+      };
+    },
+
+    methods: {
+      onClose() {
+        this.showPopup = false;
+      }
     }
-  },
-
-  methods: {
-    onClose () {
-      this.showPopup = false
-    }
-  }
-}
+  };
 </script>
 ```
-
-## Bonus
-
-In case you're interested, I wrote an article on how I created this directive: [An Easy Way to Detect Clicks Outside an Element in Vue](https://tahazsh.com/detect-outside-click-in-vue).
-
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2019 Taha Shashtari

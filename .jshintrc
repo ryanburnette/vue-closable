@@ -1,0 +1,8 @@
+{
+  "node": true,
+  "esversion": 5,
+  "globals": {
+    "module": true,
+    "window": true
+  }
+}
